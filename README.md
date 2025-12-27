@@ -16,8 +16,15 @@ This project automates the clinical assessment of lower body strength and fall r
 - ✅ Works with standard webcam
 - ✅ Automatic test start after proper seating  
 - ✅ On-screen cues and instructions before and during the test  
-- ✅ Countdown timers to guide the user  
+- ✅ Countdown timers to guide the user 
 
+## Metrics Used
+
+- Number of valid sit-to-stand repetitions completed within 30 seconds
+- Total test duration (fixed at 30 seconds)
+- Posture detection using pose landmarks (seated vs standing)
+- Arm usage detection (arms crossed vs arms used for support)
+- Test start validation based on correct seated posture
 
 ## Requirements
 
@@ -44,12 +51,23 @@ This project automates the clinical assessment of lower body strength and fall r
 2. Cross your arms on your chest (hands on opposite shoulders).
 3. Keep your feet flat on the floor.
 4. The test will start automatically once seated correctly for a few seconds.
-5. Stand up and sit down 
-
-**without using your arms**.
-
+5. Stand up and sit down repeatedly for 30 seconds **without using your arms**.
 6. If you use your arms, the test will stop and record a score of 0.
 7. Press 'Q' at any time to quit.
+
+## Passing and Failing Conditions
+
+### Passing Conditions
+- User completes one or more valid sit-to-stand repetitions
+- Arms remain crossed throughout the test
+- User stays within the camera frame
+- Test runs uninterrupted for the full duration
+
+### Failing / Interrupted Conditions
+- User uses arms for support at any point during the test
+- User leaves the camera frame during the test
+- Test is manually exited using the 'Q' key
+- Test is interrupted before completion
 
 ### Key Enhancements in This Version
 
