@@ -627,56 +627,62 @@ class SitToStandCounter:
     def show_result_overlay(self, cap, final_result, test_status):
 
         while True:
-           ret, frame = cap.read()
-           if not ret:
-               continue
- 
-           frame = cv2.flip(frame, 1)
+            ret, frame = cap.read()
+            if not ret:
+                continue
 
-           if test_status == "completed":
-               title_text = "TEST COMPLETE"
-               title_color = (0, 255, 0)   # Green
-           else:
-               title_text = "TEST FAILED"
-               title_color = (0, 0, 255)   # Red
+            frame = cv2.flip(frame, 1)
 
-           cv2.putText(frame, title_text, (40, 60),
-                       cv2.FONT_HERSHEY_SIMPLEX, 1.6, title_color, 3)
+            # Title
+            if test_status == "completed":
+                title_text = "TEST COMPLETE"
+                title_color = (0, 255, 0)
+            else:
+                title_text = "TEST FAILED"
+                title_color = (0, 0, 255)
 
+            cv2.putText(frame, title_text, (40, 60),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.6, title_color, 3)
 
-           cv2.putText(frame, f"Total Stands: {self.stand_count}", (40, 120),
-                       cv2.FONT_HERSHEY_SIMPLEX, 1.1, (255, 255, 0), 2)
+            # Count
+            cv2.putText(frame, f"Total Stands: {self.stand_count}", (40, 120),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.1, (255, 255, 0), 2)
 
-           cv2.putText(frame, f"Risk Level: {final_result['risk_level']}", (40, 165),
-                       cv2.FONT_HERSHEY_SIMPLEX, 1.1, (0, 0, 255), 2)
+            # ✅ SHOW RISK ONLY IF TEST COMPLETED
+            if test_status == "completed":
+                cv2.putText(frame, f"Risk Level: {final_result['risk_level']}", (40, 165),
+                            cv2.FONT_HERSHEY_SIMPLEX, 1.1, (0, 0, 255), 2)
+            else:
+                cv2.putText(frame, "Risk Level: N/A (Test not completed)", (40, 165),
+                            cv2.FONT_HERSHEY_SIMPLEX, 1.0, (200, 200, 200), 2)
 
-           cv2.putText(frame, "SESSION HISTORY", (40, 230),
-                       cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 255, 255), 2)
+            # Session history
+            cv2.putText(frame, "SESSION HISTORY", (40, 230),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.2, (255, 255, 255), 2)
 
-           y_offset = 270
-           s = self.session_history[-1]
+            y_offset = 270
+            s = self.session_history[-1]
 
-           text = (
-               f"Session {len(self.session_history)} | {s['timestamp']} | "
-               f"Age: {s['age']} | Gender: {s['gender']} | "
-               f"Count: {s['count']} | "
-               f"Arm Violation: {'YES' if s['arm_violation'] else 'NO'} | "
-               f"Risk: {s['risk_level']}"
-           )
+            text = (
+                f"Session {len(self.session_history)} | {s['timestamp']} | "
+                f"Age: {s['age']} | Gender: {s['gender']} | "
+                f"Count: {s['count']} | "
+                f"Arm Violation: {'YES' if s['arm_violation'] else 'NO'}"
+            )
 
-           cv2.putText(frame, text, (40, y_offset),
-                       cv2.FONT_HERSHEY_SIMPLEX, 0.55, (200, 200, 200), 1)
+            cv2.putText(frame, text, (40, y_offset),
+                        cv2.FONT_HERSHEY_SIMPLEX, 0.55, (200, 200, 200), 1)
 
-           cv2.putText(frame, "Press R to Retry or Q to Quit", (40, y_offset + 60),
-                       cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 255), 2)
+            cv2.putText(frame, "Press R to Retry or Q to Quit", (40, y_offset + 60),
+                        cv2.FONT_HERSHEY_SIMPLEX, 1.0, (0, 255, 255), 2)
 
-           cv2.imshow("30-Second Chair Stand Test", frame)
-           key = cv2.waitKey(1) & 0xFF
+            cv2.imshow("30-Second Chair Stand Test", frame)
+            key = cv2.waitKey(1) & 0xFF
 
-           if key in (ord('r'), ord('R')):
-               return True
-           elif key in (ord('q'), ord('Q')):
-               return False
+            if key in (ord('r'), ord('R')):
+                return True
+            elif key in (ord('q'), ord('Q')):
+                return False
 
 # Run the test
 if __name__ == "__main__":

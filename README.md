@@ -12,7 +12,7 @@ This project automates the clinical assessment of lower body strength and fall r
 - ✅ Real-time visual feedback
 - ✅ Arm usage violation detection
 - ✅ CDC STEADI compliant scoring
-- ✅ Instant risk assessment reports
+- ✅ Risk assessment generated only for successfully completed tests
 - ✅ Works with standard webcam
 - ✅ Automatic test start after proper seating  
 - ✅ On-screen cues and instructions before and during the test  
@@ -52,7 +52,7 @@ This project automates the clinical assessment of lower body strength and fall r
 3. Keep your feet flat on the floor.
 4. The test will start automatically once seated correctly for a few seconds.
 5. Stand up and sit down repeatedly for 30 seconds **without using your arms**.
-6. If you use your arms, the test will stop and record a score of 0.
+6. If you use your arms, the test will stop and be marked as **Test Failed** (no risk assessment is generated).
 7. Press 'Q' at any time to quit.
 
 ## Passing and Failing Conditions
@@ -82,3 +82,26 @@ This project automates the clinical assessment of lower body strength and fall r
 - The test is based on the CDC STEADI 30-Second Chair Stand Test.
 - Below-average scores indicate increased fall risk.
 - Ensure proper lighting and webcam positioning for accurate tracking.
+
+## Test Flow & Result Logic
+
+The application follows CDC STEADI guidelines for administering the 30-Second Chair Stand Test.
+
+### Test Start
+- The test begins only when the user is seated correctly with arms crossed.
+- A 3–2–1 countdown is displayed before the timer starts.
+
+### Test Completion
+- The test runs for a fixed duration of 30 seconds.
+- If the user completes the full duration without protocol violations, the test is marked as **Test Complete**.
+
+### Test Failure / Interruption
+- If the user uses their arms for support at any point, the test is immediately stopped.
+- Interrupted tests are marked as **Test Failed**.
+
+### Risk Assessment Logic
+- Fall risk assessment is calculated **only when the test completes the full 30 seconds**.
+- If the test fails or is interrupted, no risk level is calculated or displayed.
+- Failed tests show **“Risk Level: N/A (Test not completed)”**.
+
+This prevents incorrect fall-risk interpretation from incomplete or invalid test results.
